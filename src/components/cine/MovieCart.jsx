@@ -1,13 +1,13 @@
 /* eslint-disable react/prop-types */
-
+import { getImageUrl } from "../../utils/cine-utility";
 const MovieCart = ({ movie }) => {
   return (
     <>
       <figure className="p-4 border border-black/10 shadow-sm dark:border-white/10 rounded-xl">
         <img
           className="w-full object-cover"
-          src="./assets/movie-1.png"
-          alt=""
+          src={getImageUrl(movie.cover)}
+          alt="cover_pic"
         />
         <figcaption className="pt-4">
           <h3 className="text-xl mb-1">{movie.title}</h3>
