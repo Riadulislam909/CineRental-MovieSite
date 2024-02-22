@@ -1,11 +1,14 @@
 /* eslint-disable react/prop-types */
-import { useState } from "react";
+import { useContext, useState } from "react";
+import Tag from "../../assets/tag.svg";
+import { MovieContext } from "../../contexts";
 import { getImageUrl } from "../../utils/cine-utility";
 import MovieDetailsModal from "./MovieDetailsModal";
 import Rating from "./Rating";
 const MovieCart = ({ movie }) => {
   const [showMovieModal, setShowMovieModal] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
+  const { cartData, setCartData } = useContext(MovieContext);
   function handleModalClose() {
     setSelectedMovie(null);
     setShowMovieModal(false);
@@ -14,10 +17,27 @@ const MovieCart = ({ movie }) => {
     setSelectedMovie(movie);
     setShowMovieModal(true);
   }
+  function handleAddToCart(event, movie) {
+    event.stopPropagation();
+    let found = cartData.find((item) => {
+      return item.id === movie.id;
+    });
+    if (!found) {
+      setCartData([...cartData, movie]);
+    } else {
+      console.log(`${movie.title} was added in th cart.`);
+    }
+    console.log(cartData);
+  }
+
   return (
     <>
       {showMovieModal && (
-        <MovieDetailsModal onClose={handleModalClose} movie={selectedMovie} />
+        <MovieDetailsModal
+          onClose={handleModalClose}
+          movie={selectedMovie}
+          onAddCart={handleAddToCart}
+        />
       )}
       <figure className="p-4 border border-black/10 shadow-sm dark:border-white/10 rounded-xl">
         {/* anchor tag is used because when we click in the single movie cart it
@@ -37,8 +57,11 @@ const MovieCart = ({ movie }) => {
             <a
               className="bg-primary rounded-lg py-2 px-5 flex items-center justify-center gap-2 text-[#171923] font-semibold text-sm"
               href="#"
+              onClick={(event) => {
+                handleAddToCart(event, movie);
+              }}
             >
-              <img src="./assets/tag.svg" alt="" />
+              <img src={Tag} alt="tag_image" />
               <span>${movie.price} | Add to Cart</span>
             </a>
           </figcaption>
