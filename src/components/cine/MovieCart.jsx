@@ -8,7 +8,7 @@ import Rating from "./Rating";
 const MovieCart = ({ movie }) => {
   const [showMovieModal, setShowMovieModal] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
-  const { cartData, setCartData } = useContext(MovieContext);
+  const { state, dispatch } = useContext(MovieContext);
   function handleModalClose() {
     setSelectedMovie(null);
     setShowMovieModal(false);
@@ -19,15 +19,20 @@ const MovieCart = ({ movie }) => {
   }
   function handleAddToCart(event, movie) {
     event.stopPropagation();
-    let found = cartData.find((item) => {
+    let found = state.cartData.find((item) => {
       return item.id === movie.id;
     });
     if (!found) {
-      setCartData([...cartData, movie]);
+      dispatch({
+        type: "ADD_TO_CART",
+        payload: {
+          ...movie,
+        },
+      });
     } else {
       console.log(`${movie.title} was added in th cart.`);
     }
-    console.log(cartData);
+    console.log(state.cartData);
   }
 
   return (

@@ -5,13 +5,15 @@ import Checkout from "../assets/icons/checkout.svg";
 import { MovieContext } from "../contexts";
 import { getImageUrl } from "./../utils/cine-utility";
 const CartDetails = ({ onCloseCart }) => {
-  const { cartData, setCartData } = useContext(MovieContext);
-  function handleDeleteItem(event, movieId) {
+  const { state, dispatch } = useContext(MovieContext);
+
+  function handleDeleteItem(event, item) {
     event.preventDefault();
-    const filteredMovies = cartData.filter((item) => {
-      return item.id !== movieId;
+
+    dispatch({
+      type: "REMOVE_FROM_CART",
+      payload: item,
     });
-    setCartData([...filteredMovies]);
   }
   return (
     <>
@@ -22,10 +24,10 @@ const CartDetails = ({ onCloseCart }) => {
               Your Carts
             </h2>
             <div className="space-y-8 lg:space-y-12 max-h-[450px] overflow-auto mb-10 lg:mb-14">
-              {cartData.length === 0 ? (
+              {state.cartData.length === 0 ? (
                 <p>Cart is empty.</p>
               ) : (
-                cartData.map((item) => (
+                state.cartData.map((item) => (
                   <div
                     className="grid grid-cols-[1fr_auto] gap-4"
                     key={item.id}
@@ -57,7 +59,7 @@ const CartDetails = ({ onCloseCart }) => {
                         />
                         <span
                           className="max-md:hidden"
-                          onClick={(e) => handleDeleteItem(e, item.id)}
+                          onClick={(e) => handleDeleteItem(e, item)}
                         >
                           Remove
                         </span>
