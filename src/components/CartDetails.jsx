@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useContext } from "react";
+import { toast } from "react-toastify";
 import Delete from "../assets/delete.svg";
 import Checkout from "../assets/icons/checkout.svg";
 import { MovieContext } from "../contexts";
@@ -13,6 +14,9 @@ const CartDetails = ({ onCloseCart }) => {
     dispatch({
       type: "REMOVE_FROM_CART",
       payload: item,
+    });
+    toast.error(`${item.title} has been removed`, {
+      position: "bottom-right",
     });
   }
   return (
